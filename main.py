@@ -2,3 +2,5 @@
 
 import render
 import math
+
+render.init()
