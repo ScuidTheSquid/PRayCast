@@ -1,5 +1,4 @@
 import math
-import time
 import pyglet
 from pyglet.window import key
 
@@ -43,6 +42,12 @@ def drawPlayer(px, py, a):
     plx = px + math.sin(a*math.pi/180)*10
     ply = py + math.cos(a*math.pi/180)*10
     player = pyglet.shapes.Line(px, py, plx, ply, width=2, color=(255, 0, 0))
+
+    # Draw a circle around the player with the same radius as collision detection
+    radius = 5  # Adjust as needed
+    circle = pyglet.shapes.Circle(x=px, y=py, radius=radius, color=(50, 225, 30))
+
+    circle.draw()
     player.draw()
 
 class Box:
