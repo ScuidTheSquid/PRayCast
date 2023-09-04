@@ -9,8 +9,9 @@ class Player:
         self.x = x
         self.y = y
         self.angle = a
+        self.fov = 70
         self.map = map
-        self.turnMultiplier = 100
+        self.turnMultiplier = 50
         self.speed = 50
         self.radius = 5  # Radius of the player's circle
         self.grid_size = 32  # Assuming each grid cell is 32x32 pixels
@@ -73,9 +74,9 @@ class Player:
 
     def draw(self):
         # Draw the player as a line (representing player's direction)
-        plx = self.x + math.sin(self.angle * math.pi / 180) * 10
-        ply = self.y + math.cos(self.angle * math.pi / 180) * 10
-        player_line = Line(self.x, self.y, plx, ply, width=2, color=(255, 0, 0))
+        plx = self.x + math.sin(self.angle * math.pi / 180) * 100
+        ply = self.y + math.cos(self.angle * math.pi / 180) * 100
+        player_line = Line(self.x, self.y, plx, ply, width=2, color=(0, 0, 255))
 
         # Draw a circle around the player to represent the player's position and collision radius
         circle = Circle(x=self.x, y=self.y, radius=self.radius, color=(50, 225, 30))
