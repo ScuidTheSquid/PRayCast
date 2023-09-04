@@ -1,9 +1,17 @@
 #main.py
 
-import render
 import math
 import time
+import pyglet
 
-render.initWindow(800, 600, "PRayCast")
+window = pyglet.window.Window()
 
-time.sleep(6)
+
+
+
+@window.event
+def on_draw():
+    window.clear()
+    
+    
+pyglet.app.run()
