@@ -12,12 +12,11 @@ class InputHandler:
         self.keys.discard(symbol)
 
     def update(self, dt):
-        for symbol in self.keys:
-            if symbol == key.W:
-                self.player.move_forward()
-            elif symbol == key.A:
-                self.player.turn_left()
-            elif symbol == key.S:
-                self.player.move_backward()
-            elif symbol == key.D:
-                self.player.turn_right()
+        if key.W in self.keys:
+            self.player.move_forward(dt)
+        if key.A in self.keys:
+            self.player.turn_left(dt)
+        if key.S in self.keys:
+            self.player.move_backward(dt)
+        if key.D in self.keys:
+            self.player.turn_right(dt)
