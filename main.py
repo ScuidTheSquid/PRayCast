@@ -1,30 +1,87 @@
-#main.py
-
 import math
 import time
 import pyglet
+from pyglet.window import key
 
 px = 100
-py = 100
+py = 500
 pa = 45
+player_speed = 5
 
-window = pyglet.window.Window()
+map = [
+    [1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1]
+]
+
+window = pyglet.window.Window(800, 600, "PRayCast")
 
 @window.event
 def on_key_press(symbol, modifiers):
-    pass
-
+    global pa, px, py
+    if symbol == key.W:
+        new_px = px + math.sin(pa*math.pi/180) * player_speed
+        new_py = py + math.cos(pa*math.pi/180) * player_speed
+        if not is_collision(new_px, new_py):
+            px, py = new_px, new_py
+    elif symbol == key.A:
+        pa -= 10
+    elif symbol == key.S:
+        new_px = px - math.sin(pa*math.pi/180) * player_speed
+        new_py = py - math.cos(pa*math.pi/180) * player_speed
+        if not is_collision(new_px, new_py):
+            px, py = new_px, new_py
+    elif symbol == key.D:
+        pa += 10
 
 def drawPlayer(px, py, a):
-    plx = px - math.sin(a*math.pi/180)*10
-    ply = py - math.cos(a*math.pi/180)*10
-    player = pyglet.shapes.Line(px, py, plx, ply)
-    
+    plx = px + math.sin(a*math.pi/180)*10
+    ply = py + math.cos(a*math.pi/180)*10
+    player = pyglet.shapes.Line(px, py, plx, ply, width=2, color=(255, 0, 0))
     player.draw()
+
+class Box:
+    def __init__(self, x, y, width, height, borderColor=(255, 255, 255), color=(0, 0, 0)):
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.color = color
+        self.borderColor = borderColor
+
+    def draw(self):
+        box = pyglet.shapes.BorderedRectangle(self.x, self.y, self.width, self.height, border_color=self.borderColor, color=self.color)
+        box.draw()
+
+def drawMap():
+    for i, row in enumerate(map):
+        for j, cell in enumerate(row):
+            if cell == 1:
+                # Create a Box for walls (where map value is 1)
+                box = Box(j * 32, 600 - (i * 32) - 32, 32, 32)  # Adjust position and size as needed
+                box.draw()
+
+def is_collision(new_px, new_py):
+    # Check if the new player position collides with any walls
+    for i, row in enumerate(map):
+        for j, cell in enumerate(row):
+            if cell == 1:
+                box_x = j * 32
+                box_y = 600 - (i * 32) - 32
+                if (new_px + 5 >= box_x and new_px <= box_x + 32 and
+                    new_py + 5 >= box_y and new_py <= box_y + 32):
+                    return True
+    return False
 
 @window.event
 def on_draw():
     window.clear()
+    drawMap()
     drawPlayer(px, py, pa)
 
 pyglet.app.run()
